@@ -1,28 +1,48 @@
-# MIMIC-III ETL Project
+# MIMIC-III ETL & Modelling Project
 
-This repository contains my exploratory ETL work using the MIMIC-III dataset.  
-The goal is to clean, transform, and merge core clinical tables including:
+This repository contains my exploratory ETL and modelling work using the **MIMIC-III critical care dataset**.  
+The goal is to clean and merge key clinical tables, engineer useful features, and build a baseline predictive model for **ICU mortality**.
 
-- PATIENTS  
-- ADMISSIONS  
-- DIAGNOSES_ICD  
-- ICUSTAYS  
+## 📦 ETL & Feature Engineering
 
-I build features such as age, diagnosis groups, ICU visit sequencing, time-to-ICU, and ICU mortality indicators.  
-The final cleaned and transformed tables are saved locally as Parquet files for downstream analysis or modelling.
+This project processes the following MIMIC-III tables:
 
-## What this project includes
-- Cleaning of datetime columns and validation of timestamps  
-- Consolidating multiple date-of-death fields  
-- Computing age at admission and age at death  
-- ICD-9 chapter grouping for diagnoses  
-- Joining patients, admissions, and diagnoses  
-- Cleaning ICU stays and engineering ICU-level features  
-- Exploratory summaries (admission frequency, mortality rates, diagnoses by ethnicity/age)
+- `PATIENTS`  
+- `ADMISSIONS`  
+- `DIAGNOSES_ICD`  
+- `ICUSTAYS`  
+- `LABEVENTS`
 
-## Notes
-- **No raw MIMIC data is included in this repository.**  
-- All notebook outputs should be cleared before committing.  
-- Parquet and CSV files are excluded for compliance and privacy.
+Main ETL steps include:
 
-This project is for personal learning and practice in ETL, clinical data pipelines, and data engineering.
+- Cleaning and validating datetime columns  
+- Consolidating date-of-death fields and handling de-identified ages  
+- Engineering features such as age, ethnicity groups, time-to-ICU, and ICU visit order  
+- Grouping ICD-9 diagnoses and computing Charlson Comorbidity Index  
+- Extracting and aggregating key laboratory measurements (mean, min, max, count) for each ICU stay  
+- Merging all cleaned tables into an ICU-level analysis dataset  
+
+## 🤖 ICU Mortality Modelling
+
+A simple baseline model was developed to predict **ICU mortality**, using:
+
+- Demographics  
+- Comorbidity burden  
+- Admission and ICU metadata  
+- Laboratory features  
+
+Models tested:
+
+- **Logistic Regression**  
+- **Random Forest**  
+- **XGBoost**
+
+Because the outcome is imbalanced (≈ 7.5% mortality), class weighting was applied.  
+Evaluation included ROC–AUC, precision/recall, and basic model comparison.
+
+## ⚠️ Notes
+
+- **No raw MIMIC data is included** in this repository.  
+- Parquet, CSV, and other data files are excluded via `.gitignore`.  
+- Notebook outputs are cleared before committing.  
+- This project is for personal learning in ETL, clinical data processing, and modelling.
